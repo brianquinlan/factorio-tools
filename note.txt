@@ -1,0 +1,3 @@
+http://www.factorioforums.com/wiki/index.php?title=Prototype/Recipe
+https://www.reddit.com/r/factorio/comments/25iz4i/is_there_a_partsrecipe_list/
+https://github.com/sparr/factorio-data-extract/blob/master/recipes-to-dot.lua

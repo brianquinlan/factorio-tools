@@ -1,0 +1,69 @@
+<html>
+<head>
+<style>
+img {
+    vertical-align:middle;
+}
+table {
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 18px;
+}
+td
+{
+    height: 80px; 
+    text-align:center; 
+    vertical-align: middle;
+}
+
+.user_requested
+{
+    outline-color: red;
+    outline-style: dashed;
+    outline-width: thin;
+}
+
+</style>
+</head>
+<body>
+<table>
+    <tr>
+    <th>Item</th>
+    <th>Rate (#/minute)</th>
+    <th>Production</th>
+    <th>Consumers</th>
+    <th>Suppliers</th>
+    </tr>
+    {% for product in products %}
+    <tr {% if product.is_user_requested %}class="user_requested"{% endif %}>
+        <td>
+            <a href=""><img src="/factorio-icons/{{ product.icon }}" alt="{{ product.name }}" title="{{ product.name }}"></a>
+        </td>
+        <td>{{ product.required_production_rate }}</td>
+        <td>
+        {{ product.num_production_machines_required }}
+        <img src="/factorio-icons/assembling-machine-3.png">
+        </td>
+        <td>
+        {% for consumer, rate in product.consumers.items() %}
+            <span>
+                {% if consumer is none %}
+                <img src="/foo" alt="You" title="You">
+                {% else %}
+                <img src="/factorio-icons/{{ consumer.icon }}" alt="{{ consumer.name }}" title="{{ consumer.name }}">
+                {% endif %}
+                {{ rate }}
+            </span>
+        {% endfor %}
+        </td>
+        <td>
+        {% for supply, rate in product.suppliers.items() %}
+            <span>
+                <img src="/factorio-icons/{{ supply.icon }}" alt="{{ supply.name }}" title="{{ supply.name }}"> {{ rate }}
+            </span>
+        {% endfor %}
+        </td>
+    <tr>
+    {% endfor %}
+</table>
+</body>
+</html>
