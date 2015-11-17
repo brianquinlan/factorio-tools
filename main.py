@@ -8,7 +8,7 @@ from factorio import recipe
 
 import product
 
-recipe.Recipe.recipes_from_json(open("recipes.json", 'r'))
+recipe.Recipe.recipes_from_json(open("factorio-data/recipes.json", 'r'))
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),

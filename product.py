@@ -7,7 +7,7 @@ import os.path
 class IconStore(object):
     def __init__(self):
         self.m = {}
-        icon_dir = os.path.join(os.path.dirname(__file__), 'icons')
+        icon_dir = os.path.join(os.path.dirname(__file__), 'factorio-data/icons')
         for root, dirs, files in os.walk(icon_dir):
             print root, dirs, files
             for f in files:

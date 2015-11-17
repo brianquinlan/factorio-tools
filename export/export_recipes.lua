@@ -24,3 +24,5 @@ end
 local str = json.encode(data.raw, { indent = true })
 
 print (str)
+
+os.exit()

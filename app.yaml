@@ -5,8 +5,8 @@ threadsafe: true
 
 handlers:
 - url: /factorio-icons/(.*)$
-  static_files: icons/\1
-  upload: icons/.*
+  static_files: factorio-data/icons/\1
+  upload: factorio-data/icons/.*
   application_readable: true
 
 - url: /.*
