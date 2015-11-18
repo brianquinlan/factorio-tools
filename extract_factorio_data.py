@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import json
 import argparse
 import os.path
 import platform
@@ -8,6 +9,7 @@ import errno
 import shutil
 import logging
 import sys
+import ConfigParser
 
 def parse_path(value):
     """Returns the given path with ~ and environment variables expanded."""
@@ -46,6 +48,36 @@ def export_icons(factorio_data_dir, output_data_dir):
     logging.info('Copying %r to %r...', source_icon_path, target_icon_path)
     shutil.copytree(source_icon_path,
                     target_icon_path)
+
+
+_THING_SECTION_NAMES = ['entity-name',
+                        'equipment-name',
+                        'fluid-name',
+                        'item-name']
+_RECIPE_SECTION_NAMES = ['recipe-name']
+
+def export_names(factorio_data_dir, output_data_dir):
+    source_icon_path = os.path.join(factorio_data_dir, 'base/locale/en/base.cfg')
+    target_icon_path = os.path.join(output_data_dir, 'names.json')
+
+    config = ConfigParser.RawConfigParser()
+    config.read([source_icon_path])
+
+    thing_names = {}
+    for section_name in _THING_SECTION_NAMES:
+        thing_names.update(config.items(section_name))
+
+    recipe_names = {}
+    for section_name in _RECIPE_SECTION_NAMES:
+        recipe_names.update(config.items(section_name))
+
+    with open(target_icon_path, 'w') as target_file:
+        json.dump({'item-names': thing_names,
+                   'recipe-names': recipe_names}, target_file,
+                   sort_keys=True,
+                   indent=2)
+
+
 
 # TODO(brian@sweetapp.com): Extract item names from:
 # base/locale/en/base.cfg
@@ -93,8 +125,8 @@ def main():
 
     export_recipes(factorio_data_path, output_path)
     export_icons(factorio_data_path, output_path)
+    export_names(factorio_data_path, output_path)
     sys.stderr.write('Done!\n')
-# "./Contents/data/base/locale/en/base.cfg"
 
 
 if __name__ == '__main__':

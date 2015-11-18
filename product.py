@@ -1,5 +1,6 @@
 from factorio import recipe
 from factorio import production
+from factorio import names
 
 import math
 import os.path
@@ -9,7 +10,6 @@ class IconStore(object):
         self.m = {}
         icon_dir = os.path.join(os.path.dirname(__file__), 'factorio-data/icons')
         for root, dirs, files in os.walk(icon_dir):
-            print root, dirs, files
             for f in files:
                 self.m[os.path.splitext(f)[0]] = os.path.join(root, f).replace(icon_dir, '')[1:]
 
@@ -50,7 +50,15 @@ class Product(object):
     @property
     def name(self):
         return self._name or self._recipe.name
+
+    @property
+    def url(self):
+        return 'http://www.factorioforums.com/wiki/index.php?title=%s' % (self.username.replace(' ', '_'))
     
+    @property
+    def username(self):
+        return names.get_best_recipe_name(self.name)
+
     @property
     def required_production_rate(self):
         return sum(self.consumers.values())

@@ -5,10 +5,12 @@ import jinja2
 import webapp2
 
 from factorio import recipe
+from factorio import names
 
 import product
 
 recipe.Recipe.recipes_from_json(open("factorio-data/recipes.json", 'r'))
+names.names_from_json(open("factorio-data/names.json", 'r'))
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
