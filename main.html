@@ -48,7 +48,7 @@ td
         {% for consumer, rate in product.consumers.items() %}
             <span>
                 {% if consumer is none %}
-                <img src="/foo" alt="You" title="You">
+                <img src="/img/you.png" alt="You" title="You">
                 {% else %}
                 <a href="#{{ consumer.name }}"><img src="/factorio-icons/{{ consumer.icon }}" alt="{{ consumer.username }}"
                 title="{{ consumer.username }}"></a>

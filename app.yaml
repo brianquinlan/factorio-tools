@@ -9,6 +9,9 @@ handlers:
   upload: factorio-data/icons/.*
   application_readable: true
 
+- url: /img
+  static_dir: img
+
 - url: /.*
   script: main.app
 
