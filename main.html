@@ -35,7 +35,7 @@ td
     </tr>
     {% for product in products %}
     <tr {% if product.is_user_requested %}class="user_requested"{% endif %}>
-        <td>
+        <td id="{{ product.name }}">
             <a href="{{ product.url }}"><img src="/factorio-icons/{{ product.icon }}" alt="{{ product.username }}" 
             title="{{ product.username }}"></a>
         </td>
@@ -50,8 +50,8 @@ td
                 {% if consumer is none %}
                 <img src="/foo" alt="You" title="You">
                 {% else %}
-                <img src="/factorio-icons/{{ consumer.icon }}" alt="{{ consumer.username }}"
-                title="{{ consumer.username }}">
+                <a href="#{{ consumer.name }}"><img src="/factorio-icons/{{ consumer.icon }}" alt="{{ consumer.username }}"
+                title="{{ consumer.username }}"></a>
                 {% endif %}
                 {{ rate }}
             </span>
@@ -60,8 +60,8 @@ td
         <td>
         {% for supply, rate in product.suppliers.items() %}
             <span>
-                <img src="/factorio-icons/{{ supply.icon }}" 
-                alt="{{ supply.username }}" title="{{ supply.username }}"> {{ rate }}
+                <a href="#{{ supply.name }}"><img src="/factorio-icons/{{ supply.icon }}" 
+                alt="{{ supply.username }}" title="{{ supply.username }}"></a> {{ rate }}
             </span>
         {% endfor %}
         </td>
