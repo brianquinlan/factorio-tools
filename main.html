@@ -41,8 +41,15 @@ td
         </td>
         <td>{{ product.required_production_rate }}</td>
         <td>
-        {{ product.num_production_machines_required }}
-        <img src="/factorio-icons/assembling-machine-3.png">
+        {% if product.num_production_machines_required is not none %}
+            {{ product.num_production_machines_required }}
+        {% endif %}
+
+        {% if product.num_production_machines_required is not none %}
+            <a href="{{ product.production_machine_url }}"><img src="/factorio-icons/{{ product.production_machine_icon }}"
+                            alt="{{ product.production_machine_username }}"
+                            title="{{ product.production_machine_username }}"></a>
+        {% endif %}
         </td>
         <td>
         {% for consumer, rate in product.consumers.items() %}

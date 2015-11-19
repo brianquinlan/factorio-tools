@@ -64,22 +64,45 @@ class Product(object):
         return sum(self.consumers.values())
 
     @property
-    def num_production_machines_required(self):
+    def _producer(self):
         if self._recipe is None:
             return None
         else:
             try:
-                producer = production.Producer.get_most_efficient_producer(
+                return production.Producer.get_most_efficient_producer(
                     self._recipe.category)
             except KeyError:
                 return None
-            return int(
-                math.ceil(
-                    self.required_production_rate * self._recipe.crafting_time
-                    / self._recipe.count_produced
-                    / producer.crafting_speed
-                    ))
+    
+    @property
+    def num_production_machines_required(self):
+        if self._producer is None:
+            return None
+        else:
+            return math.ceil(
+                self.required_production_rate * self._recipe.crafting_time
+                / self._recipe.count_produced
+                / self._producer.crafting_speed
+                )
 
+    @property
+    def production_machine_icon(self):
+        if self._producer is None:
+            return None
+        else:
+            return icons.get(self._producer.name)
+
+    @property
+    def production_machine_url(self):
+        return 'http://www.factorioforums.com/wiki/index.php?title=%s' % (self.production_machine_username.replace(' ', '_'))
+    
+    @property
+    def production_machine_username(self):
+        if self._producer is None:
+            return None
+        else:
+            return names.get_best_item_name(self._producer.name)
+    
 
 def _leaves_first_sort(products):
     remaining = set(products)
