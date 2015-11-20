@@ -79,11 +79,11 @@ class Product(object):
         if self._producer is None:
             return None
         else:
-            return math.ceil(
+            return int(math.ceil(
                 self.required_production_rate * self._recipe.crafting_time
                 / self._recipe.count_produced
                 / self._producer.crafting_speed
-                )
+                ))
 
     @property
     def production_machine_icon(self):
