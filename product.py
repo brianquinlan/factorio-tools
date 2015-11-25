@@ -14,7 +14,9 @@ class IconStore(object):
                 self.m[os.path.splitext(f)[0]] = os.path.join(root, f).replace(icon_dir, '')[1:]
 
     def get(self, name):
-        return self.m[name]
+        # TODO(brian@sweetapp.com): Some items may not have an icon, use some
+        # sort of generic default icon here.
+        return self.m.get(name, '')
 
 icons = IconStore()
 

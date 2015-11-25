@@ -39,8 +39,6 @@ def get_produceable_items():
         key=lambda i: i.username)
 
 
-# XXX bug with satelite because of "low-density-structure".
-
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
