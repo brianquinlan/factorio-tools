@@ -39,6 +39,10 @@ class Recipe:
     def get_recipe_by_single_result(cls, name):
         return cls.recipes_by_single_result[name]
 
+    @classmethod
+    def get_results(cls):
+        # XXX Should include all recipe outputs.
+        return cls.recipes_by_single_result.keys()
 
 class SingleResultRecipe(Recipe):
     def __init__(self,

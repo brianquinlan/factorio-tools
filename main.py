@@ -18,17 +18,45 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     undefined=jinja2.StrictUndefined,
     autoescape=True)
 
+def get_selected_items(requirements):
+    class SelectedItem(object):
+        def __init__(self, name, rate):
+            self.name = name
+            self.username = names.get_best_item_name(name)
+            self.rate = rate
+    return sorted(
+        [SelectedItem(name, rate) for (name, rate) in requirements],
+        key=lambda i: i.username)
 
+def get_produceable_items():
+    class Item(object):
+        def __init__(self, name):
+            self.name = name
+            self.username = names.get_best_item_name(name)
+
+    return sorted(
+        [Item(result) for result in recipe.Recipe.get_results()],
+        key=lambda i: i.username)
+
+
+# XXX bug with satelite because of "low-density-structure".
 
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
+        requirements = []
+        for item in self.request.arguments():
+            requirements.append((item,
+                                 self.request.get_range(item, min_value=1, max_value=1000, default=1)))
+
         required_production = recipe.calculate_required_production_rates(
-            [('science-pack-3', 2)]) # [('power-armor-mk2', 1), ('rocket-silo', 1), ('assembling-machine-3', 1)])
+            requirements) # [('power-armor-mk2', 1), ('rocket-silo', 1), ('assembling-machine-3', 1)])
         products = product.required_production_rates_to_products(
             required_production)
         template_values = {
-            'products': products
+            'items_to_produce': get_produceable_items(),
+            'products': products,
+            'selected_items': get_selected_items(requirements),
         }
         template = JINJA_ENVIRONMENT.get_template('main.html')
         self.response.write(template.render(template_values))

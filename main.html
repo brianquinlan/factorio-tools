@@ -23,9 +23,52 @@ td
 }
 
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
+
 <table>
+    {% for selected_item in selected_items %}
+    <div class="rate-selector">
+    <select name="select">
+      {% for item in items_to_produce %}
+        <option value="{{ item.name }}" {% if item.name == selected_item.name %}selected{% endif %}>{{ item.username }}</option>
+      {% endfor %} 
+    </select>
+    <label><input name="rate" type="number" placeholder="1" required="yes" value="{{ selected_item.rate }}" min="0" max="10000" step="1"> /minute</label>
+    <input class="remove" type="button" value="Remove" />
+    </div>
+    {% endfor %}
+
+    <div class="rate-selector">
+    <select name="select">
+      <option value="" selected></option>
+      {% for item in items_to_produce %}
+        <option value="{{ item.name }}">{{ item.username }}</option>
+      {% endfor %} 
+    </select>
+    <label><input name="rate" type="number" placeholder="1" required="yes" value="1" min="0" max="10000" step="1"> /minute</label>
+    </div>
+
+    <input class="change" type="button" value="Update" />
+<script>
+$( ".remove" ).click(function() {
+    var selector = $(this).closest(".rate-selector");
+
+    selector.slideUp("fast", function() { selector.remove(); });
+});
+
+$( ".change" ).click(function() {
+    var o = {}
+    $( ".rate-selector" ).each(function() {
+        if ($(this).find( "option:selected").val()) {
+            o[$(this).find( "option:selected").val()] = $(this).find( "input[name=rate]").val();
+        }
+    });
+    $(location).attr('href','?' + $.param(o));
+});
+</script>
+
     <tr>
     <th>Item</th>
     <th>Rate (#/minute)</th>
