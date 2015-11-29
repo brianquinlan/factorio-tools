@@ -163,10 +163,3 @@ def _update_requirements(parent_name,
             subitem_name,
             count * required_crafting_rate / item.count_produced,
             production_node_to_required_rate)
-
-
-if __name__ == '__main__':
-    Recipe.recipes_from_json(open('recipes.json', 'r'))
-    requirements = calculate_required_production_rates([('plastic-bar', 1)])
-    # requirements = foo([('power-armor-mk2', 1)])
-    pprint.pprint(requirements)

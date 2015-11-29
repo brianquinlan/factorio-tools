@@ -88,5 +88,62 @@
     "result":"basic-inserter",
     "ingredients":[["electronic-circuit",1],["iron-gear-wheel",1],["iron-plate",1]],
     "name":"basic-inserter"
+  },
+  "destroyer-capsule":{
+    "result":"destroyer-capsule",
+    "ingredients":[["distractor-capsule",4],["speed-module",1]],
+    "enabled":false,
+    "type":"recipe",
+    "name":"destroyer-capsule",
+    "energy_required":15
+  },
+    "speed-module":{
+    "result":"speed-module",
+    "enabled":false,
+    "ingredients":[["advanced-circuit",5],["electronic-circuit",5]],
+    "type":"recipe",
+    "name":"speed-module",
+    "energy_required":15
+  },
+    "distractor-capsule":{
+    "result":"distractor-capsule",
+    "ingredients":[["defender-capsule",4],["advanced-circuit",3]],
+    "enabled":false,
+    "type":"recipe",
+    "name":"distractor-capsule",
+    "energy_required":15
+  },
+  "advanced-circuit":{
+    "result":"advanced-circuit",
+    "ingredients":[["electronic-circuit",2],["plastic-bar",2],["copper-cable",4]],
+    "enabled":false,
+    "type":"recipe",
+    "name":"advanced-circuit",
+    "energy_required":8
+  },
+  "defender-capsule":{
+    "result":"defender-capsule",
+    "ingredients":[["piercing-bullet-magazine",1],["electronic-circuit",2],["iron-gear-wheel",3]],
+    "enabled":false,
+    "type":"recipe",
+    "name":"defender-capsule",
+    "energy_required":8
+  },
+  "piercing-bullet-magazine":{
+    "result":"piercing-bullet-magazine",
+    "ingredients":[["copper-plate",5],["steel-plate",1]],
+    "enabled":false,
+    "type":"recipe",
+    "name":"piercing-bullet-magazine",
+    "energy_required":3
+  },
+  "steel-plate":{
+    "result":"steel-plate",
+    "ingredients":[["iron-plate",5]],
+    "category":"smelting",
+    "enabled":false,
+    "type":"recipe",
+    "name":"steel-plate",
+    "energy_required":17.5
   }
 }
