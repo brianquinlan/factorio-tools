@@ -1,50 +1,66 @@
+"""Data and computations related to Factorio recipes."""
+
 from __future__ import division
 
-import os
 import json
-import pprint
 
 
 REFINED_FLUIDS = ['heavy-oil', 'light-oil', 'petroleum-gas']
 
 
-class Recipe:
+class Recipe(object):
+    """An ABC for all factorio recipes.
+
+    A recipe is a list of ingredients that can be combined using a production
+    machine (e.g. an chemical plant) to produce a set of results.
+    """
+
     recipes_by_name = {}
     recipes_by_single_result = {}
 
     @classmethod
-    def from_json(cls, obj):
+    def _from_json(cls, obj):
+        """Loads and returns a Recipe given a JSON object."""
         assert obj['type'] == 'recipe'
 
         if 'result' in obj or ('results' in obj and len(obj['results']) == 1):
             return SingleResultRecipe.from_json(obj)
-        # assert False, 'Unexpected recipe: %r' % obj
+        # TODO(brian@sweetapp.com): Should handle multiple result recipes.
 
     @classmethod
     def recipes_from_json(cls, json_stream):
+        """Loads recipes from a stream containing JSON data."""
         recipe_objects = json.load(json_stream)
         for recipe_object in recipe_objects.values():
-            recipe = Recipe.from_json(recipe_object)
+            recipe = cls._from_json(recipe_object)
             if recipe is None:
                 continue
+
+            assert recipe.name not in cls.recipes_by_name, (
+                'duplicate recipe %r' % recipe.name)
             cls.recipes_by_name[recipe.name] = recipe
             if isinstance(recipe, SingleResultRecipe):
                 cls.recipes_by_single_result[recipe.result] = recipe
 
     @classmethod
-    def get_recipe_by_name(cls, name):
-        return cls.recipes_by_name[name]
+    def get_recipe_by_name(cls, recipe_name):
+        """Returns a Recipe given a name e.g. 'iron-gear-wheel'."""
+        return cls.recipes_by_name[recipe_name]
 
     @classmethod
-    def get_recipe_by_single_result(cls, name):
-        return cls.recipes_by_single_result[name]
+    def get_recipe_by_single_result(cls, item_name):
+        """Returns a Recipe that has the given item as its only product."""
+        return cls.recipes_by_single_result[item_name]
 
     @classmethod
     def get_results(cls):
-        # XXX Should include all recipe outputs.
+        """Returns the name of every item that can be produced."""
+        # TODO(brian@sweetapp.com): Should include all recipe outputs.
         return cls.recipes_by_single_result.keys()
 
 class SingleResultRecipe(Recipe):
+    """A recipe with a single result e.g. 'iron-gear-wheel'"""
+
     def __init__(self,
                  name,
                  ingredients,
@@ -60,7 +76,7 @@ class SingleResultRecipe(Recipe):
         self.result = result
         self.result_type = result_type
         self.count_produced = count_produced
-    
+
     def __repr__(self):
         return (
             '<%s(name=%r result=%r crafting_time=%r category=%r, '
@@ -74,10 +90,12 @@ class SingleResultRecipe(Recipe):
                 self.count_produced))
 
     def crafting_rate(self):
+        """The number of items that can be produced per unit time."""
         return self.count_produced / self.crafting_time
 
     @classmethod
     def from_json(cls, obj):
+        """Return a SingleResultRecipe given a JSON object."""
         assert obj['type'] == 'recipe', 'expected recipe, got %r, %r' % (
             obj['type'], obj)
 
@@ -123,6 +141,36 @@ class _ProductionNode(object):
 
 
 def calculate_required_production_rates(items_and_crafting_rates):
+    """Calculate the complete tree of dependent items given items and rates.
+
+    e.g.
+    >>> calculate_required_production_rates([('electronic-circuit', 3)])
+    [(u'copper-cable',
+      {u'copper-plate': 4.5},
+      {'electronic-circuit': 9.0}),
+     (u'copper-ore', {}, {u'copper-plate': 4.5}),
+     (u'copper-plate',
+      {u'copper-ore': 4.5},
+      {u'copper-cable': 4.5}),
+     ('electronic-circuit',
+      {u'copper-cable': 9.0, u'iron-plate': 3.0},
+      {None: 3}),
+     (u'iron-ore', {}, {u'iron-plate': 3.0}),
+     (u'iron-plate',
+      {u'iron-ore': 3.0},
+      {'electronic-circuit': 3.0})]
+
+    Args:
+        items_and_crafting_rates: A list of 2-tuples (<item>, <rate>) where
+            <item> is the name of an item that can be produced (e.g. 'pipe') and
+            <rate> is the number that must be produced per unit time.
+    Returns:
+        A list of 3-tuples (<item>, <suppliers>, <consumers>) where <item> is
+        the name of the item being produced, <suppliers> is a dictionary
+        {<item>: <rate>} of ingredients required to produce the item and
+        <consumers> is a dictionary {<item>: <rate>} of items that consume this
+        one as part of their production.
+    """
     requirements = {}
     for item_name, required_crafting_rate in items_and_crafting_rates:
         _update_requirements(
@@ -144,7 +192,7 @@ def _update_requirements(parent_name,
         production_node_to_required_rate.setdefault(
             item_name, _ProductionNode(item_name)).add_requirement(
                 parent_name, required_crafting_rate)
-        return        
+        return
     try:
         item = Recipe.get_recipe_by_single_result(item_name)
     except KeyError:
