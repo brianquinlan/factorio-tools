@@ -1,3 +1,5 @@
+"""Tests for factorio.recipe."""
+
 import os.path
 import unittest
 
@@ -25,9 +27,11 @@ class TestRecipe(unittest.TestCase):
         self.assertEqual(engine_recipe.name, 'electric-engine-unit')
         self.assertEqual(engine_recipe.category, 'crafting-with-fluid')
         self.assertEqual(engine_recipe.crafting_time, 20)
-        self.assertEqual(engine_recipe.ingredients, {'electronic-circuit': 2,
-          'engine-unit': 1,
-          'lubricant': 2})
+        self.assertEqual(
+            engine_recipe.ingredients,
+            {'electronic-circuit': 2,
+             'engine-unit': 1,
+             'lubricant': 2})
         self.assertEqual(engine_recipe.result, 'electric-engine-unit')
         self.assertEqual(engine_recipe.result_type, None)
         self.assertEqual(engine_recipe.count_produced, 1)
@@ -37,7 +41,7 @@ class TestRecipe(unittest.TestCase):
         self.assertEqual(plastic_bar_recipe.name, 'plastic-bar')
         self.assertEqual(plastic_bar_recipe.category, 'chemistry')
         self.assertEqual(plastic_bar_recipe.crafting_time, 1)
-        self.assertEqual(plastic_bar_recipe.ingredients, 
+        self.assertEqual(plastic_bar_recipe.ingredients,
                          {'coal': 1, 'petroleum-gas': 3})
         self.assertEqual(plastic_bar_recipe.result, 'plastic-bar')
         self.assertEqual(plastic_bar_recipe.result_type, 'item')
@@ -143,7 +147,7 @@ class TestRecipe(unittest.TestCase):
               {'basic-inserter': 5.0}),
              ('iron-gear-wheel',
               {'iron-plate': 10.0},
-              {'basic-inserter': 5.0}),             
+              {'basic-inserter': 5.0}),
              ('iron-ore', {}, {'iron-plate': 20.0}),
              ('iron-plate',
               {'iron-ore': 20.0},
