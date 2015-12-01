@@ -77,11 +77,6 @@ def export_names(factorio_data_dir, output_data_dir):
                    sort_keys=True,
                    indent=2)
 
-
-
-# TODO(brian@sweetapp.com): Extract item names from:
-# base/locale/en/base.cfg
-
 def create_output_data_dir(path):
     try:
         os.makedirs(path)
