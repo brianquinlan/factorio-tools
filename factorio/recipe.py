@@ -44,12 +44,36 @@ class Recipe(object):
 
     @classmethod
     def get_recipe_by_name(cls, recipe_name):
-        """Returns a Recipe given a name e.g. 'iron-gear-wheel'."""
+        """Returns a Recipe given a name e.g. 'iron-gear-wheel'.
+
+        Args:
+            recipe_name: The name of the recipe e.g. 'iron-gear-wheel' or 
+                'solid-fuel-from-heavy-oil'.
+
+        Returns:
+            The Recipe instance with the given name.
+
+        Raises:
+            KeyError: if no Recipe with the given name exists.
+        """
         return cls.recipes_by_name[recipe_name]
 
     @classmethod
     def get_recipe_by_single_result(cls, item_name):
-        """Returns a Recipe that has the given item as its only product."""
+        """Returns a Recipe that has the given item as its only product.
+
+        Args:
+            item_name: The name of the item being produced e.g.
+                    'iron-gear-wheel'.
+
+        Returns:
+            A Recipe that can produce the given item and only the given item
+            i.e. Recipes with multiple outputs (e.g. 'advanced-oil-processing')
+            are excluded.
+
+        Raises:
+            KeyError: 
+        """
         return cls.recipes_by_single_result[item_name]
 
     @classmethod
@@ -154,7 +178,7 @@ def calculate_required_production_rates(items_and_crafting_rates):
       {u'copper-cable': 4.5}),
      ('electronic-circuit',
       {u'copper-cable': 9.0, u'iron-plate': 3.0},
-      {None: 3}),
+      {None: 3}),                   # Requested in "items_and_crafting_rates".
      (u'iron-ore', {}, {u'iron-plate': 3.0}),
      (u'iron-plate',
       {u'iron-ore': 3.0},
@@ -169,7 +193,8 @@ def calculate_required_production_rates(items_and_crafting_rates):
         the name of the item being produced, <suppliers> is a dictionary
         {<item>: <rate>} of ingredients required to produce the item and
         <consumers> is a dictionary {<item>: <rate>} of items that consume this
-        one as part of their production.
+        one as part of their production. Refining and mining are not included
+        in the required production.
     """
     requirements = {}
     for item_name, required_crafting_rate in items_and_crafting_rates:
