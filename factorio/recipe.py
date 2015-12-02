@@ -50,7 +50,7 @@ class Recipe(object):
         """Returns a Recipe given a name e.g. 'iron-gear-wheel'.
 
         Args:
-            recipe_name: The name of the recipe e.g. 'iron-gear-wheel' or 
+            recipe_name: The name of the recipe e.g. 'iron-gear-wheel' or
                 'solid-fuel-from-heavy-oil'.
 
         Returns:
@@ -75,7 +75,7 @@ class Recipe(object):
             are excluded.
 
         Raises:
-            KeyError: 
+            KeyError: if no recipe has the given item as its sole output.
         """
         return cls.recipes_by_single_result[item_name]
 
