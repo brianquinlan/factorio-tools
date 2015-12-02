@@ -30,6 +30,9 @@ class Recipe(object):
     @classmethod
     def recipes_from_json(cls, json_stream):
         """Loads recipes from a stream containing JSON data."""
+        cls.recipes_by_name = {}
+        cls.recipes_by_single_result = {}
+
         recipe_objects = json.load(json_stream)
         for recipe_object in recipe_objects.values():
             recipe = cls._from_json(recipe_object)
