@@ -10,10 +10,10 @@ handlers:
   application_readable: true
 
 - url: /img
-  static_dir: img
+  static_dir: appengine/img
 
 - url: /.*
-  script: main.app
+  script: appengine.main.app
 
 libraries:
 - name: jinja2
