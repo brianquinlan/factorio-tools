@@ -4,9 +4,8 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /factorio-icons/(.*)$
-  static_files: factorio-data/icons/\1
-  upload: factorio-data/icons/.*
+- url: /factorio-data/icons
+  static_dir: factorio-data/icons
   application_readable: true
 
 - url: /img

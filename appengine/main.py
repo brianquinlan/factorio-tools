@@ -25,7 +25,7 @@ def get_selected_items(requirements):
 
     return sorted(
         [SelectedItem(name, rate) for (name, rate) in requirements],
-        key=lambda selected_item: i.selected_item)
+        key=lambda selected_item: selected_item.username)
 
 def get_produceable_items():
     class Item(object):

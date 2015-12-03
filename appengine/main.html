@@ -79,7 +79,7 @@ $( ".change" ).click(function() {
     {% for product in products %}
     <tr {% if product.is_user_requested %}class="user_requested"{% endif %}>
         <td id="{{ product.name }}">
-            <a href="{{ product.url }}"><img src="/factorio-icons/{{ product.icon }}" alt="{{ product.username }}" 
+            <a href="{{ product.url }}"><img src="{{ product.icon }}" alt="{{ product.username }}" 
             title="{{ product.username }}"></a>
         </td>
         <td>{{ product.required_production_rate }}</td>
@@ -89,7 +89,7 @@ $( ".change" ).click(function() {
         {% endif %}
 
         {% if product.num_production_machines_required is not none %}
-            <a href="{{ product.production_machine_url }}"><img src="/factorio-icons/{{ product.production_machine_icon }}"
+            <a href="{{ product.production_machine_url }}"><img src="{{ product.production_machine_icon }}"
                             alt="{{ product.production_machine_username }}"
                             title="{{ product.production_machine_username }}"></a>
         {% endif %}
@@ -100,7 +100,7 @@ $( ".change" ).click(function() {
                 {% if consumer is none %}
                 <img src="/img/you.png" alt="You" title="You">
                 {% else %}
-                <a href="#{{ consumer.name }}"><img src="/factorio-icons/{{ consumer.icon }}" alt="{{ consumer.username }}"
+                <a href="#{{ consumer.name }}"><img src="{{ consumer.icon }}" alt="{{ consumer.username }}"
                 title="{{ consumer.username }}"></a>
                 {% endif %}
                 {{ rate }}
@@ -110,7 +110,7 @@ $( ".change" ).click(function() {
         <td>
         {% for supply, rate in product.suppliers.items() %}
             <span>
-                <a href="#{{ supply.name }}"><img src="/factorio-icons/{{ supply.icon }}" 
+                <a href="#{{ supply.name }}"><img src="{{ supply.icon }}" 
                 alt="{{ supply.username }}" title="{{ supply.username }}"></a> {{ rate }}
             </span>
         {% endfor %}

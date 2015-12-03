@@ -1,24 +1,12 @@
+import math
+import os.path
+
 from factorio import recipe
 from factorio import production
 from factorio import names
 
-import math
-import os.path
+from appengine import icons
 
-class IconStore(object):
-    def __init__(self):
-        self.m = {}
-        icon_dir = 'factorio-data/icons'
-        for root, dirs, files in os.walk(icon_dir):
-            for f in files:
-                self.m[os.path.splitext(f)[0]] = os.path.join(root, f).replace(icon_dir, '')[1:]
-
-    def get(self, name):
-        # TODO(brian@sweetapp.com): Some items may not have an icon, use some
-        # sort of generic default icon here.
-        return self.m.get(name, '')
-
-icons = IconStore()
 
 class Product(object):
     def __init__(self, recipe, name):
@@ -47,7 +35,7 @@ class Product(object):
     
     @property
     def icon(self):
-        return icons.get(self.name)
+        return icons.get_icon_for_item(self.name)
 
     @property
     def name(self):
@@ -92,7 +80,7 @@ class Product(object):
         if self._producer is None:
             return None
         else:
-            return icons.get(self._producer.name)
+            return icons.get_icon_for_item(self._producer.name)
 
     @property
     def production_machine_url(self):
