@@ -7,7 +7,7 @@ import webapp2
 from factorio import recipe
 from factorio import names
 
-import product
+from appengine import produced_item
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -48,7 +48,7 @@ class MainPage(webapp2.RequestHandler):
 
         required_production = recipe.calculate_required_production_rates(
             requirements)
-        products = product.required_production_rates_to_products(
+        products = produced_item.required_production_rates_to_produced_items(
             required_production)
         template_values = {
             'items_to_produce': get_produceable_items(),
