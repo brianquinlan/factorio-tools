@@ -34,5 +34,38 @@
     "type":"recipe",
     "name":"sulfur",
     "energy_required":1
+  },
+  "light-oil-cracking":{
+    "results":[{
+        "type":"fluid",
+        "name":"petroleum-gas",
+        "amount":2
+      }],
+    "icon":"__base__/graphics/icons/fluid/light-oil-cracking.png",
+    "type":"recipe",
+    "name":"light-oil-cracking",
+    "energy_required":5,
+    "order":"b[fluid-chemistry]-b[light-oil-cracking]",
+    "category":"chemistry",
+    "subgroup":"fluid-recipes",
+    "main_product":"",
+    "ingredients":[{
+        "type":"fluid",
+        "name":"water",
+        "amount":3
+      },{
+        "type":"fluid",
+        "name":"light-oil",
+        "amount":3
+      }],
+    "enabled":false
+  },
+  "iron-plate":{
+    "result":"iron-plate",
+    "category":"smelting",
+    "ingredients":[["iron-ore",1]],
+    "type":"recipe",
+    "name":"iron-plate",
+    "energy_required":3.5
   }
 }

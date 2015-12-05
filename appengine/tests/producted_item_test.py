@@ -153,5 +153,77 @@ class TestProducedItem(unittest.TestCase):
         self.assertEqual(copper_ore_item.is_user_requested, False)
         self.assertEqual(copper_ore_item.name, 'copper-ore')
 
+    def test_refined_fluids_have_no_production_machine(self):
+        rates = recipe.calculate_required_production_rates(
+            [('petroleum-gas', 100)])
+
+        # Should only have one item i.e. 'light-oil-cracking' should not be
+        # used to make 'petrolium-gas' from 'light-oil'.
+        petrolium_gas_item, = (
+            produced_item.required_production_rates_to_produced_items(rates))
+
+        self.assertEqual(petrolium_gas_item.is_user_requested, True)
+        self.assertEqual(petrolium_gas_item.name, 'petroleum-gas')
+        self.assertEqual(petrolium_gas_item.required_production_rate, 100)
+        # All production machine information should be None.
+        self.assertIsNone(petrolium_gas_item.production_machine_username)
+        self.assertIsNone(petrolium_gas_item.num_production_machines_required)
+        self.assertIsNone(petrolium_gas_item.production_machine_icon)
+        self.assertIsNone(petrolium_gas_item.production_machine_url)
+
+    def test_missing_product_name(self):
+        rates = recipe.calculate_required_production_rates(
+            [('iron-plate', 100)])
+
+        iron_plate_item, iron_ore_item, = (
+            produced_item.required_production_rates_to_produced_items(rates))
+
+        self.assertEqual(iron_plate_item.is_user_requested, True)
+        self.assertEqual(iron_plate_item.name, 'iron-plate')
+        self.assertEqual(iron_plate_item.username, 'iron-plate')
+        self.assertEqual(iron_plate_item.icon,
+                         '/appengine/tests/icons/iron-plate.png')
+        self.assertIsNone(iron_plate_item.url)
+        self.assertEqual(iron_plate_item.required_production_rate, 100)
+        self.assertEqual(iron_plate_item.production_machine_username,
+                         'Electric furnace')
+        # <rate> = <#-machines> * <#-recipe-results> * <machine-speed>
+        #          ---------------------------------------------------
+        #                        <energy-required>
+        # 100 = x * 1 * 2 / 3.5
+        # 100 = 4/7x
+        # (7/4)100 = x
+        # x = 175
+        self.assertEqual(iron_plate_item.num_production_machines_required,
+                         175)
+        self.assertEqual(
+            iron_plate_item.production_machine_icon,
+            '/appengine/tests/icons/electric-furnace.png')
+        self.assertEqual(
+            iron_plate_item.production_machine_url,
+            'http://www.factorioforums.com/wiki/index.php?title='
+            'Electric_furnace')
+
+        self.assertEqual(iron_ore_item.is_user_requested, False)
+        self.assertEqual(iron_ore_item.name, 'iron-ore')
+
+    def test_missing_product_icon(self):
+        rates = recipe.calculate_required_production_rates(
+            [('iron-ore', 100)])
+
+        # Should only have one item i.e. 'light-oil-cracking' should not be
+        # used to make 'petrolium-gas' from 'light-oil'.
+        iron_ore_item, = (
+            produced_item.required_production_rates_to_produced_items(rates))
+
+        self.assertEqual(iron_ore_item.is_user_requested, True)
+        self.assertEqual(iron_ore_item.name, 'iron-ore')
+        self.assertEqual(iron_ore_item.username, 'Iron ore')
+        self.assertEqual(iron_ore_item.icon, '/img/missing-item.png')
+        self.assertEqual(
+            iron_ore_item.url,
+            'http://www.factorioforums.com/wiki/index.php?title=Iron_ore')
+        self.assertEqual(iron_ore_item.required_production_rate, 100)
+
 if __name__ == '__main__':
     unittest.main()

@@ -52,6 +52,8 @@ class ProductedItem(object):
     @property
     def url(self):
         """A URL where the user can get more information about the item."""
+        if self.name == self.username:
+            return None  # No real English name.
         return get_wiki_url(self.username)
 
     @property
