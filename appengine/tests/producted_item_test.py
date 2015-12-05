@@ -211,8 +211,6 @@ class TestProducedItem(unittest.TestCase):
         rates = recipe.calculate_required_production_rates(
             [('iron-ore', 100)])
 
-        # Should only have one item i.e. 'light-oil-cracking' should not be
-        # used to make 'petrolium-gas' from 'light-oil'.
         iron_ore_item, = (
             produced_item.required_production_rates_to_produced_items(rates))
 
