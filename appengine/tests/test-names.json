@@ -1,0 +1,13 @@
+{
+  "item-names": {
+    "assembling-machine-3": "Assembling machine 3",
+    "chemical-plant": "Chemical plant", 
+    "copper-cable": "Copper cable",
+    "copper-ore": "Copper ore",
+    "copper-plate": "Copper plate",
+    "electric-furnace": "Electric furnace",
+    "sulfur": "Sulfur"
+  },
+  "recipe-names": {
+  }
+}
