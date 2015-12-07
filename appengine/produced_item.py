@@ -1,5 +1,7 @@
 """Builds objects representing a produced factorio item for templating."""
 
+from __future__ import division
+
 import math
 
 from factorio import recipe
