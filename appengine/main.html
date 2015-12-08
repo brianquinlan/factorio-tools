@@ -1,10 +1,15 @@
 <html>
 <head>
 <style>
+fieldset { 
+    border: thin solid lightblue;
+}
+
 img {
     vertical-align:middle;
 }
 table {
+    padding-top: 2em;
     font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
 }
 td
@@ -31,7 +36,7 @@ td.production {
 
 tr.user_requested
 {
-    outline-color: red;
+    outline-color: lightblue;
     outline-style: dashed;
     outline-width: thin;
 }
@@ -40,8 +45,8 @@ tr.user_requested
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
-
-<table>
+ <fieldset>
+  <legend>Required Production Rates</legend>
     {% for selected_item in selected_items %}
     <div class="rate-selector">
     <select name="select">
@@ -65,6 +70,8 @@ tr.user_requested
     </div>
 
     <input class="change" type="button" value="Update" />
+ </fieldset>
+
 <script>
 $( ".remove" ).click(function() {
     var selector = $(this).closest(".rate-selector");
@@ -83,6 +90,7 @@ $( ".change" ).click(function() {
 });
 </script>
 
+<table>
     <tr>
     <th>Item</th>
     <th>Rate (#/time)</th>
