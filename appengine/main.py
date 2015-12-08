@@ -10,6 +10,9 @@ from factorio import names
 from appengine import produced_item
 
 
+MAX_PRODUCTION_RATE = 10000.0
+MIN_PRODUCTION_RATE = 0.01
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
@@ -43,8 +46,13 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         requirements = []
         for item in self.request.arguments():
-            requirements.append(
-                (item, self.request.get_range(item, min_value=1, default=1)))
+            try:
+                rate = float(self.request.get(item))
+            except ValueError:
+                rate = 1.0
+
+            rate = min(MAX_PRODUCTION_RATE, max(MIN_PRODUCTION_RATE, rate))
+            requirements.append((item, rate))
 
         required_production = recipe.calculate_required_production_rates(
             requirements)

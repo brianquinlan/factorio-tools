@@ -6,16 +6,30 @@ img {
 }
 table {
     font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
-    font-size: 18px;
 }
 td
 {
-    height: 80px; 
     text-align:center; 
     vertical-align: middle;
+    padding-left: 1em;
+    padding-bottom: 1em;
+    padding-top: 1em;
 }
 
-.user_requested
+td span {
+    padding-right: 1em;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+td.rate {
+    text-align: right;
+}
+td.production {
+    text-align: right;
+}
+
+tr.user_requested
 {
     outline-color: red;
     outline-style: dashed;
@@ -35,7 +49,7 @@ td
         <option value="{{ item.name }}" {% if item.name == selected_item.name %}selected{% endif %}>{{ item.username }}</option>
       {% endfor %} 
     </select>
-    <label><input name="rate" type="number" placeholder="1" required="yes" value="{{ selected_item.rate }}" min="0" max="10000" step="1"> /minute</label>
+    <label><input name="rate" type="number" placeholder="1" required="yes" value="{{ selected_item.rate }}"> /time</label>
     <input class="remove" type="button" value="Remove" />
     </div>
     {% endfor %}
@@ -47,7 +61,7 @@ td
         <option value="{{ item.name }}">{{ item.username }}</option>
       {% endfor %} 
     </select>
-    <label><input name="rate" type="number" placeholder="1" required="yes" value="1" min="0" max="10000" step="1"> /minute</label>
+    <label><input name="rate" type="number" placeholder="1" required="yes" value="1"> /time</label>
     </div>
 
     <input class="change" type="button" value="Update" />
@@ -71,7 +85,7 @@ $( ".change" ).click(function() {
 
     <tr>
     <th>Item</th>
-    <th>Rate (#/minute)</th>
+    <th>Rate (#/time)</th>
     <th>Production</th>
     <th>Consumers</th>
     <th>Suppliers</th>
@@ -82,36 +96,33 @@ $( ".change" ).click(function() {
             <a href="{{ product.url }}"><img src="{{ product.icon }}" alt="{{ product.username }}" 
             title="{{ product.username }}"></a>
         </td>
-        <td>{{ product.required_production_rate }}</td>
-        <td>
+        <td class="rate">{{ '%0.2f' | format(product.required_production_rate) }}</td>
+        <td class="production">
         {% if product.num_production_machines_required is not none %}
+            <span>
             {{ product.num_production_machines_required }}
-        {% endif %}
-
-        {% if product.num_production_machines_required is not none %}
             <a href="{{ product.production_machine_url }}"><img src="{{ product.production_machine_icon }}"
                             alt="{{ product.production_machine_username }}"
-                            title="{{ product.production_machine_username }}"></a>
+                            title="{{ product.production_machine_username }}"></a>        </span>
         {% endif %}
         </td>
         <td>
         {% for consumer, rate in product.consumers.items() %}
-            <span>
-                {% if consumer is none %}
+            <span>{% if consumer is none %}
                 <img src="/img/you.png" alt="You" title="You">
                 {% else %}
                 <a href="#{{ consumer.name }}"><img src="{{ consumer.icon }}" alt="{{ consumer.username }}"
                 title="{{ consumer.username }}"></a>
                 {% endif %}
-                {{ rate }}
+                {{ '%0.2f' | format(rate) }}
             </span>
         {% endfor %}
         </td>
         <td>
         {% for supply, rate in product.suppliers.items() %}
-            <span>
-                <a href="#{{ supply.name }}"><img src="{{ supply.icon }}" 
-                alt="{{ supply.username }}" title="{{ supply.username }}"></a> {{ rate }}
+            <span><a href="#{{ supply.name }}"><img src="{{ supply.icon }}" 
+                alt="{{ supply.username }}" title="{{ supply.username }}"></a>
+                {{ '%0.2f' | format(rate) }}
             </span>
         {% endfor %}
         </td>
