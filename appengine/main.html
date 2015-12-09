@@ -1,141 +1,119 @@
 <html>
 <head>
 <style>
-fieldset { 
-    border: thin solid lightblue;
-}
-
-img {
-    vertical-align:middle;
-}
-table {
-    padding-top: 2em;
-    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
-}
-td
-{
-    text-align:center; 
-    vertical-align: middle;
-    padding-left: 1em;
-    padding-bottom: 1em;
-    padding-top: 1em;
-}
-
-td span {
-    padding-right: 1em;
-    display: inline-block;
-    white-space: nowrap;
-}
-
-td.rate {
-    text-align: right;
-}
-td.production {
-    text-align: right;
-}
-
-tr.user_requested
-{
-    outline-color: lightblue;
-    outline-style: dashed;
-    outline-width: thin;
-}
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
+
 </head>
 <body>
- <fieldset>
-  <legend>Required Production Rates</legend>
+  <fieldset>
+    <legend>Required Production Rates</legend>
     {% for selected_item in selected_items %}
-    <div class="rate-selector">
-    <select name="select">
+      <div class="rate-selector">
+      <select name="select">
       {% for item in items_to_produce %}
-        <option value="{{ item.name }}" {% if item.name == selected_item.name %}selected{% endif %}>{{ item.username }}</option>
+        <option
+          value="{{ item.name }}"
+          {% if item.name == selected_item.name %}selected{% endif %}>{{ item.username }}</option>
       {% endfor %} 
-    </select>
-    <label><input name="rate" type="number" placeholder="1" required="yes" value="{{ selected_item.rate }}"> /time</label>
-    <input class="remove" type="button" value="Remove" />
-    </div>
+      </select>
+      <label><input name="rate"
+                    type="number"
+                    placeholder="1"
+                    required="yes"
+                    value="{{ selected_item.rate }}"> /time</label>
+      <input class="remove" type="button" value="Remove" />
+      </div>
     {% endfor %}
 
     <div class="rate-selector">
-    <select name="select">
-      <option value="" selected></option>
-      {% for item in items_to_produce %}
-        <option value="{{ item.name }}">{{ item.username }}</option>
-      {% endfor %} 
-    </select>
-    <label><input name="rate" type="number" placeholder="1" required="yes" value="1"> /time</label>
+      <select name="select">
+        <option value="" selected></option>
+        {% for item in items_to_produce %}
+          <option value="{{ item.name }}">{{ item.username }}</option>
+        {% endfor %} 
+      </select>
+      <label><input name="rate"
+                    type="number"
+                    placeholder="1"
+                    required="yes"
+                    value="1"> /time</label>
     </div>
 
     <input class="change" type="button" value="Update" />
- </fieldset>
+  </fieldset>
 
-<script>
+  <script>
 $( ".remove" ).click(function() {
-    var selector = $(this).closest(".rate-selector");
-
-    selector.slideUp("fast", function() { selector.remove(); });
+  var selector = $(this).closest(".rate-selector");
+  selector.slideUp("fast", function() { selector.remove(); });
 });
 
 $( ".change" ).click(function() {
-    var o = {}
-    $( ".rate-selector" ).each(function() {
-        if ($(this).find( "option:selected").val()) {
-            o[$(this).find( "option:selected").val()] = $(this).find( "input[name=rate]").val();
-        }
-    });
-    $(location).attr('href','?' + $.param(o));
+  var rates = {}
+  $( ".rate-selector" ).each(function() {
+      if ($(this).find( "option:selected").val()) {
+          rates[$(this).find( "option:selected").val()] = 
+            $(this).find( "input[name=rate]").val();
+      }
+  });
+  $(location).attr('href','?' + $.param(rates));
 });
-</script>
+  </script>
 
 <table>
-    <tr>
+  <tr>
     <th>Item</th>
     <th>Rate (#/time)</th>
     <th>Production</th>
     <th>Consumers</th>
     <th>Suppliers</th>
-    </tr>
-    {% for product in products %}
+  </tr>
+  {% for product in products %}
     <tr {% if product.is_user_requested %}class="user_requested"{% endif %}>
-        <td id="{{ product.name }}">
-            <a href="{{ product.url }}"><img src="{{ product.icon }}" alt="{{ product.username }}" 
-            title="{{ product.username }}"></a>
-        </td>
+      <td id="{{ product.name }}">
+        <a href="{{ product.url }}"><img src="{{ product.icon }}"
+                                         alt="{{ product.username }}" 
+                                         title="{{ product.username }}"></a>
+      </td>
         <td class="rate">{{ '%0.2f' | format(product.required_production_rate) }}</td>
         <td class="production">
         {% if product.num_production_machines_required is not none %}
-            <span>
-            {{ product.num_production_machines_required }}
-            <a href="{{ product.production_machine_url }}"><img src="{{ product.production_machine_icon }}"
-                            alt="{{ product.production_machine_username }}"
-                            title="{{ product.production_machine_username }}"></a>        </span>
+          <span>{{ product.num_production_machines_required }}
+            <a href="{{ product.production_machine_url }}"><img 
+                src="{{ product.production_machine_icon }}"
+                alt="{{ product.production_machine_username }}"
+                title="{{ product.production_machine_username }}"></a></span>
         {% endif %}
         </td>
         <td>
         {% for consumer, rate in product.consumers.items() %}
-            <span>{% if consumer is none %}
-                <img src="/img/you.png" alt="You" title="You">
-                {% else %}
-                <a href="#{{ consumer.name }}"><img src="{{ consumer.icon }}" alt="{{ consumer.username }}"
+          <span>{% if consumer is none %}
+            <img src="/img/you.png" alt="You" title="You">
+            {% else %}
+            <a href="#{{ consumer.name }}"><img
+                src="{{ consumer.icon }}"
+                alt="{{ consumer.username }}"
                 title="{{ consumer.username }}"></a>
-                {% endif %}
-                {{ '%0.2f' | format(rate) }}
-            </span>
+            {% endif %}
+            {{ '%0.2f' | format(rate) }}
+          </span>
         {% endfor %}
         </td>
         <td>
         {% for supply, rate in product.suppliers.items() %}
-            <span><a href="#{{ supply.name }}"><img src="{{ supply.icon }}" 
-                alt="{{ supply.username }}" title="{{ supply.username }}"></a>
-                {{ '%0.2f' | format(rate) }}
-            </span>
+          <span><a href="#{{ supply.name }}"><img
+              src="{{ supply.icon }}" 
+              alt="{{ supply.username }}"
+              title="{{ supply.username }}"></a>
+              {{ '%0.2f' | format(rate) }}
+          </span>
         {% endfor %}
         </td>
     <tr>
-    {% endfor %}
+  {% endfor %}
 </table>
 </body>
 </html>

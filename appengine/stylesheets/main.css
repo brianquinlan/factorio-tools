@@ -1,0 +1,39 @@
+fieldset {
+  border: thin solid lightblue;
+}
+
+img {
+  vertical-align:middle;
+}
+table {
+  padding-top: 2em;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+}
+td
+{
+  text-align:center; 
+  vertical-align: middle;
+  padding-left: 1em;
+  padding-bottom: 1em;
+  padding-top: 1em;
+}
+
+td span {
+  padding-right: 1em;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+td.rate {
+  text-align: right;
+}
+td.production {
+  text-align: right;
+}
+
+tr.user_requested
+{
+  outline-color: lightblue;
+  outline-style: dashed;
+  outline-width: thin;
+}

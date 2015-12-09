@@ -11,6 +11,9 @@ handlers:
 - url: /img
   static_dir: appengine/img
 
+- url: /stylesheets
+  static_dir: appengine/stylesheets
+
 - url: /.*
   script: appengine.main.app
 
