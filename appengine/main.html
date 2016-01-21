@@ -8,6 +8,8 @@
 
 </head>
 <body>
+<div id="container">
+<div id="content">
   <fieldset>
     <legend>Required Production Rates</legend>
     {% for selected_item in selected_items %}
@@ -63,57 +65,63 @@ $( ".change" ).click(function() {
 });
   </script>
 
-<table>
-  <tr>
-    <th>Item</th>
-    <th>Rate (#/time)</th>
-    <th>Production</th>
-    <th>Consumers</th>
-    <th>Suppliers</th>
-  </tr>
-  {% for product in products %}
-    <tr {% if product.is_user_requested %}class="user_requested"{% endif %}>
-      <td id="{{ product.name }}">
-        <a href="{{ product.url }}"><img src="{{ product.icon }}"
-                                         alt="{{ product.username }}" 
-                                         title="{{ product.username }}"></a>
-      </td>
-        <td class="rate">{{ '%0.2f' | format(product.required_production_rate) }}</td>
-        <td class="production">
-        {% if product.num_production_machines_required is not none %}
-          <span>{{ product.num_production_machines_required }}
-            <a href="{{ product.production_machine_url }}"><img 
-                src="{{ product.production_machine_icon }}"
-                alt="{{ product.production_machine_username }}"
-                title="{{ product.production_machine_username }}"></a></span>
-        {% endif %}
-        </td>
-        <td>
-        {% for consumer, rate in product.consumers.items() %}
-          <span>{% if consumer is none %}
-            <img src="/img/you.png" alt="You" title="You">
-            {% else %}
-            <a href="#{{ consumer.name }}"><img
-                src="{{ consumer.icon }}"
-                alt="{{ consumer.username }}"
-                title="{{ consumer.username }}"></a>
-            {% endif %}
-            {{ '%0.2f' | format(rate) }}
-          </span>
-        {% endfor %}
-        </td>
-        <td>
-        {% for supply, rate in product.suppliers.items() %}
-          <span><a href="#{{ supply.name }}"><img
-              src="{{ supply.icon }}" 
-              alt="{{ supply.username }}"
-              title="{{ supply.username }}"></a>
-              {{ '%0.2f' | format(rate) }}
-          </span>
-        {% endfor %}
-        </td>
+  <table>
     <tr>
-  {% endfor %}
-</table>
+      <th>Item</th>
+      <th>Rate (#/time)</th>
+      <th>Production</th>
+      <th>Consumers</th>
+      <th>Suppliers</th>
+    </tr>
+    {% for product in products %}
+      <tr {% if product.is_user_requested %}class="user_requested"{% endif %}>
+        <td id="{{ product.name }}">
+          <a href="{{ product.url }}"><img src="{{ product.icon }}"
+                                           alt="{{ product.username }}" 
+                                           title="{{ product.username }}"></a>
+        </td>
+          <td class="rate">{{ '%0.2f' | format(product.required_production_rate) }}</td>
+          <td class="production">
+          {% if product.num_production_machines_required is not none %}
+            <span>{{ product.num_production_machines_required }}
+              <a href="{{ product.production_machine_url }}"><img 
+                  src="{{ product.production_machine_icon }}"
+                  alt="{{ product.production_machine_username }}"
+                  title="{{ product.production_machine_username }}"></a></span>
+          {% endif %}
+          </td>
+          <td>
+          {% for consumer, rate in product.consumers.items() %}
+            <span>{% if consumer is none %}
+              <img src="/img/you.png" alt="You" title="You">
+              {% else %}
+              <a href="#{{ consumer.name }}"><img
+                  src="{{ consumer.icon }}"
+                  alt="{{ consumer.username }}"
+                  title="{{ consumer.username }}"></a>
+              {% endif %}
+              {{ '%0.2f' | format(rate) }}
+            </span>
+          {% endfor %}
+          </td>
+          <td>
+          {% for supply, rate in product.suppliers.items() %}
+            <span><a href="#{{ supply.name }}"><img
+                src="{{ supply.icon }}" 
+                alt="{{ supply.username }}"
+                title="{{ supply.username }}"></a>
+                {{ '%0.2f' | format(rate) }}
+            </span>
+          {% endfor %}
+          </td>
+      <tr>
+    {% endfor %}
+  </table>
+</div>
+</div>
+<div id="footer">
+  Source code at
+  <a href="https://github.com/brianquinlan/factorio-tools">https://github.com/brianquinlan/factorio-tools</a>
+</div>
 </body>
 </html>
